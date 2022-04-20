@@ -116,7 +116,7 @@ class BA_Network:
 def main():
 
     # parameter for the Erdos-Renyi network creation
-    """
+    
     num_nodes_1 = 2000
     p_1 = 0.0001
     network_1 = ER_Network(num_nodes=num_nodes_1, p=p_1,)
@@ -130,7 +130,7 @@ def main():
     #network_2.print_network()
     filename_2 = "graph_results/random2.txt"
     network_2.store_network_as_txt_file(filename_2)
-    """
+    
 
     # -------------------------------------------------------
 
