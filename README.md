@@ -6,6 +6,7 @@ To run both the Erdos-Renyi or the Barabasi-Albert model the script can just be 
 ```
 python random_graphs.py
 ```
+Running the script will overwrite the current results.  
 
 In order to run only one of them, the other block of code has to be commented out from the main()-method.
 
