@@ -55,7 +55,7 @@ class ER_Network:
 class BA_Network:
     def __init__(self, num_nodes, m0, m):
         self.nodes = []
-        self.edges = []
+        self.edges = [] # stores edges as tuples
         self.nodes_pref = []
 
         # create fully-connected graph
@@ -75,18 +75,18 @@ class BA_Network:
         # attach other nodes with preferential attachment
         for value in range(m0, num_nodes):
             new_node = Node(value)
-            m_now = min(m, len(self.nodes))
-            sample_list = self.__get_sample_from_pref_list(copy.deepcopy(self.nodes_pref), m_now)
+            m_now = min(m, len(self.nodes)) # check if m smaller than amount of all nodes
+            sample_list = self.__get_sample_from_pref_list(copy.copy(self.nodes_pref), m_now)
             for node in sample_list:
                 new_node.add_edge(node)
                 node.add_edge(new_node)
                 self.edges.append((node, new_node)) # stores edge as a tuple
-                self.nodes_pref.extend([node, new_node])
+                self.nodes_pref.extend([node, new_node]) # updates pref attachment list
             self.nodes.append(new_node)
 
     def __get_sample_from_pref_list(self, pref_list, m):
         result = []
-        for i in range(m):
+        for _ in range(m):
             random_node = random.choice(pref_list)
             result.append(random_node)
             # Source of the following line: https://stackoverflow.com/a/1157160 (modified)
@@ -102,9 +102,9 @@ class BA_Network:
         return len(self.edges)
 
     def print_network(self):
-        print("Nodes", len(self.nodes), self.nodes)
-        print("Edges", len(self.edges), self.edges)
-        print("Prefs", len(self.nodes_pref), self.nodes_pref)
+        print("Nodes", len(self.nodes))#, self.nodes)
+        print("Edges", len(self.edges))#, self.edges)
+        print("Prefs", len(self.nodes_pref))#, self.nodes_pref)
 
     def store_network_as_txt_file(self, filename):
         with open(filename, 'w') as f:
@@ -143,6 +143,7 @@ def main():
     network_3.print_network()
     network_3.store_network_as_txt_file(filename_ba1)
 
+    
     n_2 = 2000
     m0_2 = 5
     m_2 = 2
