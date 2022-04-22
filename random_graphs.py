@@ -1,5 +1,9 @@
 import random
 import copy
+import networkx as nx
+import numpy as np
+import pandas as pd
+import plotly.express as px
 
 class Node:
     def __init__(self, value):
@@ -50,6 +54,18 @@ class ER_Network:
             f.write(str(self.get_size()) + "\n")
             for (n1, n2) in self.edges:
                 f.write(n1.value + " " + n2.value + "\n")
+
+    def to_nx(self):
+        G = nx.Graph()
+        
+        for n1, n2 in self.edges:
+            G.add_edge(n1, n2)
+            
+        nodes_to_add = [n for n in self.nodes if n not in [x.value for x in list(G.nodes)]]
+        for n in nodes_to_add:
+            G.add_node(n)
+            
+        return G
 
 
 class BA_Network:
@@ -113,6 +129,31 @@ class BA_Network:
                 f.write(n1.value + " " + n2.value + "\n")
 
 
+def giant_component_size(G):
+    nodes = list(G.nodes)
+    n_nodes = len(nodes)
+    biggest_component_size = 0
+    while len(nodes) > biggest_component_size:
+        source = random.choice(nodes)
+        component_edges = list(nx.bfs_edges(G, source))
+        component_nodes = set(
+            [x[0] for x in component_edges] + 
+            [x[1] for x in component_edges]
+        )
+        
+        if len(component_nodes) > n_nodes / 2:
+            return len(component_nodes)
+        
+        if len(component_nodes) > biggest_component_size:
+            biggest_component_size = len(component_nodes)
+            
+        nodes.remove(source)
+        if len(component_nodes) > 0:
+            nodes = [n for n in nodes if n not in component_nodes]
+    
+    return biggest_component_size
+            
+
 def main():
 
     # parameter for the Erdos-Renyi network creation
@@ -167,6 +208,29 @@ def main():
     network_test = BA_Network(n_test, m0_test, m_test)
     network_test.print_network()
     """
-
+    
+    # n5
+    gc_size_random1 = giant_component_size(network_1.to_nx())
+    gc_size_random2 = giant_component_size(network_2.to_nx())
+    
+    print('Sizes of giant components:')
+    print(f'\tRandom1: {gc_size_random1}')
+    print(f'\tRandom2: {gc_size_random2}')
+    
+    # n6
+    p_list = np.arange(.0001, .005, .0001)
+    gc_sizes = []
+    for p in p_list:
+        net = ER_Network(num_nodes=2000, p=p)
+        gc_sizes.append(giant_component_size(net.to_nx()))
+    
+    df = pd.DataFrame({'p': p_list, 'gc_size': gc_sizes})
+    fig = px.line(df, x='p', y='gc_size',
+        labels={'gc_size': 'Giant component size'},
+        title='Giant component size of Erdos-Renyi models by over values'            
+    )
+    fig.show()
+    
+    
 if __name__ == "__main__":
     main()
