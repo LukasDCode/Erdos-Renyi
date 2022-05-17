@@ -27,4 +27,7 @@ and a verbose (-v) mode to get informative prints on the command line.
 python page_rank.py -i 10 -b 0.73 -v
 ```
 
+The predefined network looks like the following:
+![predefined PageRank network with 7 nodes](img/pagerank_graph.png)
+
 
