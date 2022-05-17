@@ -1,4 +1,5 @@
 import argparse
+import matplotlib.pyplot as plt
 
 class Node:
     def __init__(self, value):
@@ -44,6 +45,7 @@ class Manual_Network():
     def __init__(self):
         self.nodes = []
         self.edges = []
+        self.pagerank_history = []
 
     def add_node(self, node):
         self.nodes.append(node)
@@ -58,6 +60,11 @@ class Manual_Network():
             for node in self.nodes:
                 node.calculate_pagerank(beta, self.get_size(), iteration+1, verbose)
             self.normalize_pagerank()
+            if verbose:
+                pagerank_record = []
+                for node in self.nodes:
+                    pagerank_record.append(node.pagerank)
+                self.pagerank_history.append(pagerank_record)
 
     def normalize_pagerank(self):
         """
@@ -86,6 +93,23 @@ class Manual_Network():
             f.write(str(self.get_size()) + "\n")
             for (n1, n2) in self.edges:
                 f.write(n1.value + " " + n2.value + "\n")
+
+    def plot_pagerank_history(self, verbose):
+
+        print(self.pagerank_history)
+        print(len(self.pagerank_history))
+
+        x = range(1, len(self.pagerank_history)+1) # [node.value for node in self.nodes] #["A", "B", "C"]
+        y = self.pagerank_history # list(map(list, zip(*self.pagerank_history))) #[[1,2,3],[4,5,6],[7,8,9]]
+        plt.xlabel("Iterations")
+        plt.ylabel("PageRank Value")
+        plt.title("PageRank History over " + str(len(self.pagerank_history)) + " Iterations")
+        for i in range(len(y[0])):
+            plt.plot(x,[pt[i] for pt in y],label = "Node "+self.nodes[i].value) #'id %s'%i)
+        plt.legend()
+        plt.savefig('graph_results/pagerank-plot_' + str(len(self.pagerank_history)) + '-iterations.png')
+        if verbose:
+            plt.show()
 
 
 def create_pagerank_network():
@@ -131,6 +155,7 @@ def main(args):
     print("# of edges", pagerank_network.get_num_edges())    
     pagerank_network.iterate_pagerank(beta=args.beta, iterations=args.iterations, verbose=args.verbose)
     pagerank_network.print_network()
+    pagerank_network.plot_pagerank_history(args.verbose)
 
 
 def range_limited_float_type(arg):
