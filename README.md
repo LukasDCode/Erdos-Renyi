@@ -11,13 +11,6 @@ Running the script will overwrite the current results.
 In order to run only one of them, the other block of code has to be commented out from the main()-method.
 
 
-## Erdos-Renyi
-personal implementation of a Erdos-Renyi model to generate a random graph
-
-## Barabasi-Albert
-personal implementation of a Erdos-Renyi model to generate a random graph
-
-
 # PageRank 
 personal implementation of PageRank with power iteration and random teleportation
 
@@ -26,7 +19,6 @@ To run both the PageRank on a predefined network with 7 nodes, just run the foll
 ```
 python page_rank.py
 ```
-
 
 Three additional parameter can be set via arguments.  
 The amount of iterations (-i), the dampening factor / beta (-b)  
