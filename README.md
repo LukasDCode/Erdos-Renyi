@@ -31,3 +31,11 @@ The predefined network looks like the following:
 ![predefined PageRank network with 7 nodes](img/pagerank_graph.png)
 
 
+## Task 5a
+A convergence criteria of 0.001 was used. If the PageRank value for a node does not change more than 0.001 for two iteration-steps the PageRank is considered to have converged at this iteration for this specific node. Then the maximum convergence value of all nodes is taken as a representative measure for the entire run with a specific beta.  
+![plot of the convergence with a convergence criteria of 0.001](img/convergence_plot.png)
+
+## Task 5b
+Development of the final pagerank values over different beta.  
+![predefined PageRank network with 7 nodes](img/final_pagerank_plot.png)
+
