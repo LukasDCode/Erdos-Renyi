@@ -36,6 +36,6 @@ A convergence criteria of 0.001 was used. If the PageRank value for a node does 
 ![plot of the convergence with a convergence criteria of 0.001](img/convergence_plot.png)
 
 ## Final PageRank Values over Different Betas
-Development of the final pagerank values over different beta.  
+Development of the final PageRank values over different beta.  
 ![predefined PageRank network with 7 nodes](img/final_pagerank_plot.png)
 
