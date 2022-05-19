@@ -90,6 +90,12 @@ class Manual_Network():
     def get_num_edges(self):
         return len(self.edges)
 
+    def get_node_names(self):
+        names = []
+        for node in self.nodes:
+            names.append(node.value)
+        return names
+
     def print_network(self):
         print("Nodes", len(self.nodes), self.nodes)
         print("Edges", len(self.edges), self.edges)
@@ -144,8 +150,7 @@ def plot_convergence(track, list_of_betas):
 
     list_of_betas = [str(x) for x in list_of_betas]
     
-    fig = plt.figure(figsize = (8, 4))
-    
+    plt.figure(figsize = (8, 4))
     # creating the bar plot
     plt.bar(list_of_betas, track, color ='cornflowerblue')#, width = 0.4)
     
@@ -153,6 +158,22 @@ def plot_convergence(track, list_of_betas):
     plt.ylabel("# of iterations until convergence")
     plt.title("# of Iterations until Convergence for each Beta")
     plt.show()
+    plt.clf()
+
+
+def plot_final_pagerank(beta, rank, node_names, path, verbose):
+    x = beta #[str(x) for x in list_of_betas] #range(1, len(self.rank[0])+1) # [node.value for node in self.nodes] #["A", "B", "C"]
+    y = rank # list(map(list, zip(*self.pagerank_history))) #[[1,2,3],[4,5,6],[7,8,9]]
+
+    plt.figure(figsize = (8, 4))
+    plt.xlabel("Betas")
+    plt.ylabel("Final PageRank Value")
+    plt.title("Final PageRank Values")
+    for i in range(len(y[0])):
+        plt.plot(x,[pt[i] for pt in y],label = "Node "+node_names[i]) #'id %s'%i)
+    plt.legend()
+    plt.show()
+    plt.clf()
 
 
 def create_pagerank_network():
@@ -193,7 +214,7 @@ def create_pagerank_network():
 
 
 def main(args):
-    # Task 4
+    # Task 3 & 4
     # test parameter for the PageRank model
     pagerank_network = create_pagerank_network()
     pagerank_network.iterate_pagerank(beta=args.beta, iterations=args.iterations, verbose=args.verbose)
@@ -202,22 +223,23 @@ def main(args):
 
     # Task 5
     convergence_track = []
+    last_pagerank_values = []
     list_of_betas = [float(f'{x:.2f}') for x in list(np.arange(0.0, 1.01, 0.05))]
     for loop_beta in tqdm(list_of_betas):
         pagerank_network.reset_pagerank() # reset pageranks to 1.0, keep nodes and edges
         pagerank_network.iterate_pagerank(beta=loop_beta, iterations=args.iterations, verbose=False)
         if args.verbose:
-            pass
-        pagerank_network.plot_pagerank_history(loop_beta, "pagerank_results/task5/", verbose=False)
+            pagerank_network.plot_pagerank_history(loop_beta, "pagerank_results/task5/", verbose=False)
         
         pagerank_history = pagerank_network.get_pagerank_history()
         convergence_track.append(calculate_convergence(pagerank_history))
+        last_pagerank_values.append(pagerank_history[-1].copy())
     
     # Task 5 a
     plot_convergence(convergence_track, list_of_betas)
-    
-        
 
+    # Task 5 b
+    plot_final_pagerank(list_of_betas, last_pagerank_values, pagerank_network.get_node_names(), "pagerank_results/task5/", False)
 
 
 def range_limited_float_type(arg):
