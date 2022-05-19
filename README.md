@@ -13,6 +13,7 @@ In order to run only one of them, the other block of code has to be commented ou
 
 # PageRank 
 personal implementation of PageRank with power iteration and random teleportation
+[This is the initial paper of Larry Page for the PageRank](http://ilpubs.stanford.edu:8090/422/1/1999-66.pdf)
 
 ## Usage
 To run both the PageRank on a predefined network with 7 nodes, just run the following command
